@@ -1,10 +1,11 @@
 class GameController < Cramp::Controller::Websocket
   periodic_timer :update_positions, :every => 0.1
   on_data :receive_message
-  @@player_positions = {}
+  class << self; attr_accessor :player_positions end
+  @player_positions = {}
 
   def update_positions
-    data = {:type => 'update_positions', :positions => @@player_positions}.to_json
+    data = {:type => 'update_positions', :positions => GameController.player_positions}.to_json
     render data
   end
   
@@ -18,14 +19,14 @@ private
 
   def receive_register(message)
     player_uuid = UUID.new.generate
-    @@player_positions[player_uuid] = {:x => 0, :y => 0}
-    data = {:type => 'uuid', :uuid => player_uuid}.to_json
+    GameController.player_positions[player_uuid] = {:x => 0, :y => 0}
+    data = {:type => 'uuid', :uuid => player_uuid, :class_id => self.object_id}.to_json
     render data
   end
   
   def receive_player_move(message)
     player_uuid = message['uuid']
-    @@player_positions[player_uuid] = {:x => message['data']['x'], :y => message['data']['y']}
+    GameController.player_positions[player_uuid] = {:x => message['data']['x'], :y => message['data']['y']}
   end
   
 end

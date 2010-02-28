@@ -1,6 +1,6 @@
 var GameClient = function(){
 	
-	var socket = new WebSocket('ws://localhost:3000/game');
+	var socket = new WebSocket('ws://bomberman.server:3000/game');
 	var callbacks = {};
 	
 	var initWebSocket = function(){		
