@@ -10,8 +10,11 @@ MrJaba.Bomberman = function(){
 	}
 	
 	function initCanvas(){
+		var c = canvasNode();
+		c.width = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileWidth());
+		c.height = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileHeight());
 		drawMap();
-		return canvas;
+		return c;
 	}
 	
 	function clearCanvas(){
@@ -19,9 +22,9 @@ MrJaba.Bomberman = function(){
 	}
 	
 	function drawMap(){
-		for (var i=0;i<4;i++){  
-			for (var j=0;j<4;j++){				
-				canvas().drawImage(MrJaba.Bomberman.Images.getImage('StoneBlock'),j*101,i*82,101,171);  
+		for (var i=0;i< MrJaba.Bomberman.map.length;i++){  
+			for (var j=0;j<MrJaba.Bomberman.map[i].length;j++){				
+				canvas().drawImage(MrJaba.Bomberman.map[i][j].image,j*101,i*82,101,171);  
 			}  
 		}		
 	}
@@ -41,6 +44,19 @@ MrJaba.Bomberman = function(){
 		return me;
 	}
 	
+	function readMap(){
+		map = new Array();
+		$('#map tr').each(function(index){
+			row = new Array();
+			$(this).children('td').each(function(subIndex, cell){
+				var tile = {image:MrJaba.Bomberman.Images.getImage(cell.innerHTML), walkable: ($(cell).attr('walk') !== 'false')}
+				row.push(tile);
+			})
+			map.push(row);
+		})
+		return map;
+	}
+	
 	function runGameLoop(){
 		clearCanvas();
 		drawMap();
@@ -58,8 +74,9 @@ MrJaba.Bomberman = function(){
 		},
 		
 		initialize: function(){
+			MrJaba.Bomberman.map = readMap();
 			MrJaba.Bomberman.canvas = initCanvas();
-			MrJaba.Bomberman.me = initCharacter();			
+			MrJaba.Bomberman.me = initCharacter();						
 			MrJaba.Bomberman.opponents = {};
 			$(document).trigger('initDone');
 			setInterval( runGameLoop, 100 );

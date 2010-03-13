@@ -36,6 +36,18 @@ GameImages.prototype = {
 		return this.images[imageName];			
 	},
 	
+	tileWidth : function(){
+		return 101;
+	},
+	
+	visibleTileHeight : function(){
+		return 82;
+	},
+	
+	tileHeight : function(){
+		return 171;
+	}
+	
 };
 
-$(document).ready( function(){ MrJaba.Bomberman.Images = new GameImages(['images/tiles/StoneBlock.png','images/CharacterBoy.png']).initialize();});
+$(document).ready( function(){ MrJaba.Bomberman.Images = new GameImages(['images/tiles/StoneBlock.png', 'images/tiles/WallBlockTall.png','images/CharacterBoy.png']).initialize();});
