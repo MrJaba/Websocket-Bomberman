@@ -5,6 +5,8 @@ Sprite.prototype = {
 		this.node = $(id);
 		this.img = image;
 		this.canvas = canvas;
+		this.x = 0;
+		this.y = -40;
 	},
 	
 	getNode:function(){
@@ -51,9 +53,13 @@ Sprite.prototype = {
 		this.canvas.drawImage(this.img,this.x,this.y,101,171);
 	},
 	
+	getRow:function(){
+		return parseInt((this.y + (this.img.height)/2) / MrJaba.Bomberman.Images.visibleTileHeight());
+	},
+	
 	canMoveTo:function(newX, newY){
 		var boardX = (newX + this.img.width/2);
-		var boardY = (newY + (this.img.height)/2); //30 for foot position offset in the image
+		var boardY = (newY + (this.img.height)/2);
 		var x = parseInt(boardX / MrJaba.Bomberman.Images.tileWidth());
 		var y = parseInt(boardY / MrJaba.Bomberman.Images.visibleTileHeight());
 		var intoTile = MrJaba.Bomberman.map[x][y];

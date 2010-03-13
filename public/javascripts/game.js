@@ -13,7 +13,7 @@ MrJaba.Bomberman = function(){
 		var c = canvasNode();
 		c.width = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileWidth());
 		c.height = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileHeight());
-		drawMap();
+		draw();
 		return c;
 	}
 	
@@ -21,26 +21,44 @@ MrJaba.Bomberman = function(){
 		canvas().clearRect(0,0,canvasNode().width, canvasNode().height);
 	}
 	
-	function drawMap(){
-		for (var i=0;i< MrJaba.Bomberman.map.length;i++){  
-			for (var j=0;j<MrJaba.Bomberman.map[i].length;j++){				
-				canvas().drawImage(MrJaba.Bomberman.map[i][j].image,j*101,i*82,101,171);  
-			}  
-		}		
+	function draw(){
+		drawBaseTiles();
+		drawHighWallsAndSprites();
 	}
 	
-	function drawSprites(){
-		MrJaba.Bomberman.me.draw();
-		$.each(MrJaba.Bomberman.opponents, function(uuid, position){
-			canvas().drawImage(MrJaba.Bomberman.Images.getImage('CharacterBoy'),position['x'],position['y'],101,171);
-		})		
+	function drawBaseTiles(){
+		for (var i=0;i< MrJaba.Bomberman.map.length;i++){  
+			for (var j=0;j< MrJaba.Bomberman.map[i].length;j++){
+				if( MrJaba.Bomberman.map[i][j].walkable ){				
+					canvas().drawImage(MrJaba.Bomberman.map[i][j].image,j*101,i*82,101,171);  
+				}
+			}  
+		}
+	}
+	
+	function drawSpritesForRow(row){
+		if( MrJaba.Bomberman.me !== undefined ){
+			if( MrJaba.Bomberman.me.getRow() === row) { MrJaba.Bomberman.me.draw(); }
+			//$.each(MrJaba.Bomberman.opponents, function(opponent){
+				//if( opponent.getRow() == row() ) {opponent.draw();}
+			//})		
+		}
+	}
+	
+	function drawHighWallsAndSprites(){
+		for (var i=0;i< MrJaba.Bomberman.map.length;i++){  
+			for (var j=0;j< MrJaba.Bomberman.map[i].length;j++){
+				if( !MrJaba.Bomberman.map[i][j].walkable ){
+					canvas().drawImage(MrJaba.Bomberman.map[i][j].image,j*101,i*82,101,134); 
+				}
+			}
+			drawSpritesForRow(i);
+		}		
 	}
 	
 	function initCharacter(){
 		var me = new Sprite();
 		me.initialize('me', MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvas());
-		me.setX(0);
-		me.setY(-40);
 		return me;
 	}
 	
@@ -59,8 +77,7 @@ MrJaba.Bomberman = function(){
 	
 	function runGameLoop(){
 		clearCanvas();
-		drawMap();
-		drawSprites();
+		draw();
 	}
 	
 	return {
