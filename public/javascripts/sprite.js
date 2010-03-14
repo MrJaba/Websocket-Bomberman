@@ -2,11 +2,14 @@ function Sprite(){};
 Sprite.prototype = {
 	initialize:function(id, image, canvas) {
 		this.id = id;
-		this.node = $(id);
 		this.img = image;
 		this.canvas = canvas;
 		this.x = 0;
 		this.y = -40;
+	},
+	
+	getId:function(){
+		return this.id;
 	},
 	
 	getNode:function(){
@@ -50,11 +53,12 @@ Sprite.prototype = {
 	},
 
 	draw:function(){
-		this.canvas.drawImage(this.img,this.x,this.y,101,171);
+		this.canvas.getContext('2d').drawImage(this.img,this.x,this.y,101,171);
 	},
 	
 	getRow:function(){
-		return parseInt((this.y + (this.img.height)/2) / MrJaba.Bomberman.Images.visibleTileHeight());
+		var boardY = this.y + (this.img.height/2);
+		return parseInt( boardY / MrJaba.Bomberman.Images.visibleTileHeight() );
 	},
 	
 	canMoveTo:function(newX, newY){
@@ -62,8 +66,10 @@ Sprite.prototype = {
 		var boardY = (newY + (this.img.height)/2);
 		var x = parseInt(boardX / MrJaba.Bomberman.Images.tileWidth());
 		var y = parseInt(boardY / MrJaba.Bomberman.Images.visibleTileHeight());
-		var intoTile = MrJaba.Bomberman.map[x][y];
-		$('#log').html(x+","+y+","+intoTile.walkable);
-		return intoTile.walkable;
+		if( x < MrJaba.Bomberman.map.length && y < MrJaba.Bomberman.map[x].length){
+			var intoTile = MrJaba.Bomberman.map[x][y];
+			return intoTile.walkable && newX >= 0 && newX < this.canvas.width && newY >= -40 && newY < this.canvas.height;
+		}
+		return false;
 	}
 };

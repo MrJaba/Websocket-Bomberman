@@ -26,7 +26,7 @@ private
   
   def receive_player_move(message)
     player_uuid = message['uuid']
-    GameController.player_positions[player_uuid] = {:x => message['data']['x'], :y => message['data']['y']}
+    GameController.player_positions[player_uuid] = {:x => message['data']['x'], :y => message['data']['y']} unless player_uuid.nil?
   end
   
 end

@@ -21,6 +21,12 @@ MrJaba.Bomberman = function(){
 		canvas().clearRect(0,0,canvasNode().width, canvasNode().height);
 	}
 	
+	function update(){
+		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
+			bomb.tick();
+		});
+	}
+	
 	function draw(){
 		drawBaseTiles();
 		drawHighWallsAndSprites();
@@ -36,15 +42,6 @@ MrJaba.Bomberman = function(){
 		}
 	}
 	
-	function drawSpritesForRow(row){
-		if( MrJaba.Bomberman.me !== undefined ){
-			if( MrJaba.Bomberman.me.getRow() === row) { MrJaba.Bomberman.me.draw(); }
-			//$.each(MrJaba.Bomberman.opponents, function(opponent){
-				//if( opponent.getRow() == row() ) {opponent.draw();}
-			//})		
-		}
-	}
-	
 	function drawHighWallsAndSprites(){
 		for (var i=0;i< MrJaba.Bomberman.map.length;i++){  
 			for (var j=0;j< MrJaba.Bomberman.map[i].length;j++){
@@ -56,9 +53,33 @@ MrJaba.Bomberman = function(){
 		}		
 	}
 	
-	function initCharacter(){
+	function drawSpritesForRow(row){
+		if( MrJaba.Bomberman.me !== undefined ){
+			drawBombs(row);
+			drawOpponents(row);			
+			if( MrJaba.Bomberman.me.getRow() === row){ MrJaba.Bomberman.me.draw(); }
+		}
+	}
+	
+	function drawOpponents(row){
+		$.each(MrJaba.Bomberman.opponents, function(uuid, position){
+			var boardY = position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy').height/2);
+			var opRow =  parseInt( boardY / MrJaba.Bomberman.Images.visibleTileHeight() );
+			if( opRow == row ){
+				canvas().drawImage(MrJaba.Bomberman.Images.getImage('CharacterBoy'),position.x, position.y, 101,171); 
+			}
+		});
+	}
+	
+	function drawBombs(row){
+		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
+			if( MrJaba.Bomberman.me.getRow() === row){ bomb.draw(); }
+		});
+	}
+	
+	function initCharacter(id){
 		var me = new Sprite();
-		me.initialize('me', MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvas());
+		me.initialize(id, MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvasNode());
 		return me;
 	}
 	
@@ -77,10 +98,15 @@ MrJaba.Bomberman = function(){
 	
 	function runGameLoop(){
 		clearCanvas();
+		update();
 		draw();
 	}
 	
 	return {
+		
+		addBomb:function(uuid, bomb){
+			MrJaba.Bomberman.bombs[uuid] = bomb;
+		},
 		
 		updateOpponentPositions: function(positions){
 			$.each(positions, function(uuid, position){
@@ -93,8 +119,9 @@ MrJaba.Bomberman = function(){
 		initialize: function(){
 			MrJaba.Bomberman.map = readMap();
 			MrJaba.Bomberman.canvas = initCanvas();
-			MrJaba.Bomberman.me = initCharacter();						
+			MrJaba.Bomberman.me = $.extend(new Player(), initCharacter('me') );						
 			MrJaba.Bomberman.opponents = {};
+			MrJaba.Bomberman.bombs = {};
 			$(document).trigger('initDone');
 			setInterval( runGameLoop, 100 );
 		}
