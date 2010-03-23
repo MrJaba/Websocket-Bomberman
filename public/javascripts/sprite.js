@@ -15,21 +15,37 @@ Sprite.prototype = {
 	getNode:function(){
 		return this.node;
 	},
+	
+	position:function(){
+		return {x:''+this.getX(), y:''+this.getY()};
+	},
 
 	getX:function() {
 		return this.x;
 	},
+	
+	getTileX:function(newX){
+		var newX = newX || this.getX();
+		var boardX = (newX + this.img.width/2);
+		return parseInt(boardX / MrJaba.Bomberman.Images.tileWidth());		
+	},
 
 	setX:function(x) {
-		this.x = x;
+		this.x = parseInt(x);
 	},
 
 	getY:function() {
 		return this.y;
 	},
+	
+	getTileY:function(newY){
+		var newY = newY || this.getY();
+		var boardY = (newY + (this.img.height)/2);
+		return parseInt(boardY / MrJaba.Bomberman.Images.visibleTileHeight());
+	},
 
 	setY:function(y) {
-		this.y = y;
+		this.y = parseInt(y);
 	},
 	
 	moveLeft:function(offset){
@@ -62,14 +78,18 @@ Sprite.prototype = {
 	},
 	
 	canMoveTo:function(newX, newY){
-		var boardX = (newX + this.img.width/2);
-		var boardY = (newY + (this.img.height)/2);
-		var x = parseInt(boardX / MrJaba.Bomberman.Images.tileWidth());
-		var y = parseInt(boardY / MrJaba.Bomberman.Images.visibleTileHeight());
-		if( x < MrJaba.Bomberman.map.length && y < MrJaba.Bomberman.map[x].length){
-			var intoTile = MrJaba.Bomberman.map[x][y];
-			return intoTile.walkable && newX >= 0 && newX < this.canvas.width && newY >= -40 && newY < this.canvas.height;
+		var tileX = this.getTileX(newX);
+		var tileY = this.getTileY(newY);
+		if( this.inSameTile(tileX, tileY) ){ return true; }
+		if( tileX < MrJaba.Bomberman.map.length && tileY < MrJaba.Bomberman.map[tileX].length){
+			var intoTile = MrJaba.Bomberman.map[tileX][tileY];
+			var containsBomb = MrJaba.Bomberman.mapContainsBombAt(tileX, tileY);
+			return intoTile.walkable && !containsBomb && newX >= 0 && newX < this.canvas.width && newY >= -40 && newY < this.canvas.height;
 		}
 		return false;
+	},
+	
+	inSameTile:function(newTileX, newTileY){
+		return (newTileX === this.getTileX() && newTileY === this.getTileY());
 	}
 };

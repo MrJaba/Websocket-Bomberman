@@ -1,6 +1,6 @@
 function Bomb(x, y){
-	this.x = x;
-	this.y = y;
+	this.x = parseInt(x);
+	this.y = parseInt(y);
 	this.frame = 0; 
 	this.frameWidth = 86;
 	this.frameCount = 18;
@@ -20,7 +20,7 @@ Bomb.prototype = {
 		}else if( this.frame < this.frameCount ){
 			this.frame += 1;
 		}else{
-			this.frame = 0;
+			MrJaba.Bomberman.detonate(this.id);
 		}			
 	}
 }

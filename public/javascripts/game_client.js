@@ -15,9 +15,7 @@ var GameClient = function(){
 	}	
 	
 	var notifyPlayerMove = function(){
-		var x = MrJaba.Bomberman.me.getX();
-		var y = MrJaba.Bomberman.me.getY();
-		return {x:''+x, y:''+y};
+		return MrJaba.Bomberman.me.position();
 	}
 	
 	var receiveUuid = function(data){
@@ -26,6 +24,14 @@ var GameClient = function(){
 	
 	var updateOpponentPositions = function(data){
 		MrJaba.Bomberman.updateOpponentPositions(data['positions']);
+	}
+	
+	var updateBombPositions = function(data){
+		MrJaba.Bomberman.updateBombPositions(data['positions']);
+	}
+	
+	var notifyBombDrop = function(){
+		return MrJaba.Bomberman.me.position();
 	}
 	
 	var handleEvent = function(eventName, message){
@@ -40,13 +46,15 @@ var GameClient = function(){
 
 	this.trigger = function(eventName){	
 		var data = JSON.stringify({type:eventName, uuid:MrJaba.Bomberman.uuid , data:handleEvent(eventName) });
-		socket.send( data );
+		socket.send(data);
 	};
 	
 	initWebSocket();	
 	this.bind('player_move', notifyPlayerMove);
 	this.bind('uuid', receiveUuid);
 	this.bind('update_positions', updateOpponentPositions);
+	this.bind('update_bombs', updateBombPositions);
+	this.bind('send_bomb_drop', notifyBombDrop);
 }
 
 $(document).bind( 'initDone', function(){ MrJaba.Bomberman.GameClient = new GameClient() } );

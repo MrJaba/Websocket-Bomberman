@@ -73,7 +73,7 @@ MrJaba.Bomberman = function(){
 	
 	function drawBombs(row){
 		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
-			if( MrJaba.Bomberman.me.getRow() === row){ bomb.draw(); }
+			if( bomb.getRow() === row){ bomb.draw(); }
 		});
 	}
 	
@@ -104,14 +104,41 @@ MrJaba.Bomberman = function(){
 	
 	return {
 		
+		detonate:function(uuid){
+			
+		},
+		
 		addBomb:function(uuid, bomb){
 			MrJaba.Bomberman.bombs[uuid] = bomb;
 		},
 		
 		updateOpponentPositions: function(positions){
 			$.each(positions, function(uuid, position){
-				if( uuid !== MrJaba.Bomberman.uuid ){
-					MrJaba.Bomberman.opponents[uuid] = position;
+				if( uuid !== MrJaba.Bomberman.uuid ){ MrJaba.Bomberman.opponents[uuid] = position; }
+			})
+		},
+		
+		mapContainsBombAt: function(x, y){
+			var containsBomb = false;
+			$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
+				var bombX = (bomb.getX() + bomb.frameWidth/2);
+				var bombY = (bomb.getY() + MrJaba.Bomberman.Images.getImage('Bomb').height/2);
+				var boardX = parseInt(bombX / MrJaba.Bomberman.Images.tileWidth());
+				var boardY = parseInt(bombY / MrJaba.Bomberman.Images.visibleTileHeight());
+				if( !containsBomb && boardX === x && boardY === y){
+					containsBomb = true;
+				}
+			})
+			return containsBomb;
+		},
+		
+		updateBombPositions: function(positions){
+			$.each(positions, function(uuid, position){
+				if(MrJaba.Bomberman.bombs[uuid] === undefined){ 
+					var protoSprite = new Sprite();
+					protoSprite.initialize(uuid, MrJaba.Bomberman.Images.getImage('Bomb'), MrJaba.Bomberman.canvas);
+					var bomb = $.extend(protoSprite, new Bomb(position['x'], position['y']));
+					MrJaba.Bomberman.bombs[uuid] = bomb;
 				}
 			})
 		},

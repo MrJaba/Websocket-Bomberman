@@ -3,7 +3,7 @@ MrJaba.Bomberman.Movement = function(){
 		MrJaba.Bomberman.GameClient.trigger('player_move');
 	}
 	function triggerBomb(){
-		MrJaba.Bomberman.GameClient.trigger('player_bomb_drop');
+		MrJaba.Bomberman.GameClient.trigger('send_bomb_drop');
 	}
 	return{
 		initializeKeyboardInput: function(){
