@@ -20,7 +20,7 @@ Bomb.prototype = {
 		}else if( this.frame < this.frameCount ){
 			this.frame += 1;
 		}else{
-			MrJaba.Bomberman.detonate(this.id);
+			MrJaba.Bomberman.detonate(this, this.getTileX(), this.getTileY());
 		}			
 	}
 }

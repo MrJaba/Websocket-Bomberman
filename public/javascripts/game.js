@@ -55,7 +55,7 @@ MrJaba.Bomberman = function(){
 	
 	function drawSpritesForRow(row){
 		if( MrJaba.Bomberman.me !== undefined ){
-			drawBombs(row);
+			drawBombsAndExplosions(row);
 			drawOpponents(row);			
 			if( MrJaba.Bomberman.me.getRow() === row){ MrJaba.Bomberman.me.draw(); }
 		}
@@ -71,9 +71,12 @@ MrJaba.Bomberman = function(){
 		});
 	}
 	
-	function drawBombs(row){
+	function drawBombsAndExplosions(row){
 		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
-			if( bomb.getRow() === row){ bomb.draw(); }
+			if(bomb.getRow() === row){ bomb.draw(); }
+		});
+		$.each(MrJaba.Bomberman.explosions, function(uuid, explosion){
+			if(explosion.getRow() === row){ explosion.draw(); }
 		});
 	}
 	
@@ -104,8 +107,13 @@ MrJaba.Bomberman = function(){
 	
 	return {
 		
-		detonate:function(uuid){
-			
+		detonate:function(bomb, tileX, tileY){
+			delete MrJaba.Bomberman.bombs[bomb.getId()];
+			MrJaba.Bomberman.GameClient.trigger('send_bomb_detonate', bomb.getId());
+			var protoSprite = new Sprite();
+			protoSprite.initialize(bomb.getId(), MrJaba.Bomberman.Images.getImage('FireBall'), MrJaba.Bomberman.canvas);
+			var explosion = $.extend(protoSprite, new Explosion(tileX, tileY));
+			MrJaba.Bomberman.explosions[bomb.getId()] = explosion;
 		},
 		
 		addBomb:function(uuid, bomb){
@@ -149,6 +157,7 @@ MrJaba.Bomberman = function(){
 			MrJaba.Bomberman.me = $.extend(new Player(), initCharacter('me') );						
 			MrJaba.Bomberman.opponents = {};
 			MrJaba.Bomberman.bombs = {};
+			MrJaba.Bomberman.explosions = {};
 			$(document).trigger('initDone');
 			setInterval( runGameLoop, 100 );
 		}

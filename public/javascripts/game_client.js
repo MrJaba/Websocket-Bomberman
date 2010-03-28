@@ -34,6 +34,10 @@ var GameClient = function(){
 		return MrJaba.Bomberman.me.position();
 	}
 	
+	var notifyBombDetonate = function(uuid){
+		return uuid;
+	}
+	
 	var handleEvent = function(eventName, message){
     var handler = callbacks[eventName];
     if(typeof handler === undefined) return;   
@@ -44,8 +48,8 @@ var GameClient = function(){
 		callbacks[eventName] = callback;
 	};
 
-	this.trigger = function(eventName){	
-		var data = JSON.stringify({type:eventName, uuid:MrJaba.Bomberman.uuid , data:handleEvent(eventName) });
+	this.trigger = function(eventName, data){	
+		var data = JSON.stringify({type:eventName, uuid:MrJaba.Bomberman.uuid , data:handleEvent(eventName, data) });
 		socket.send(data);
 	};
 	
@@ -55,6 +59,7 @@ var GameClient = function(){
 	this.bind('update_positions', updateOpponentPositions);
 	this.bind('update_bombs', updateBombPositions);
 	this.bind('send_bomb_drop', notifyBombDrop);
+	this.bind('send_bomb_detonate', notifyBombDetonate);
 }
 
 $(document).bind( 'initDone', function(){ MrJaba.Bomberman.GameClient = new GameClient() } );

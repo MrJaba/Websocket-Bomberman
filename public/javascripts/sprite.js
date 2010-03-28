@@ -26,12 +26,16 @@ Sprite.prototype = {
 	
 	getTileX:function(newX){
 		var newX = newX || this.getX();
-		var boardX = (newX + this.img.width/2);
+		var boardX = (newX + this.getFrameWidth()/2);
 		return parseInt(boardX / MrJaba.Bomberman.Images.tileWidth());		
 	},
 
 	setX:function(x) {
 		this.x = parseInt(x);
+	},
+	
+	getFrameWidth:function(){
+		return (this.frameWidth || this.img.width);
 	},
 
 	getY:function() {
@@ -40,12 +44,16 @@ Sprite.prototype = {
 	
 	getTileY:function(newY){
 		var newY = newY || this.getY();
-		var boardY = (newY + (this.img.height)/2);
+		var boardY = (newY + (this.getFrameHeight()/2));
 		return parseInt(boardY / MrJaba.Bomberman.Images.visibleTileHeight());
 	},
 
 	setY:function(y) {
 		this.y = parseInt(y);
+	},
+	
+	getFrameHeight:function(){
+		return (this.frameHeight || this.img.height);
 	},
 	
 	moveLeft:function(offset){
@@ -80,7 +88,7 @@ Sprite.prototype = {
 	canMoveTo:function(newX, newY){
 		var tileX = this.getTileX(newX);
 		var tileY = this.getTileY(newY);
-		if( this.inSameTile(tileX, tileY) ){ return true; }
+		//if( this.inSameTile(tileX, tileY) ){ return true; }
 		if( tileX < MrJaba.Bomberman.map.length && tileY < MrJaba.Bomberman.map[tileX].length){
 			var intoTile = MrJaba.Bomberman.map[tileX][tileY];
 			var containsBomb = MrJaba.Bomberman.mapContainsBombAt(tileX, tileY);

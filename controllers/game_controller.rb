@@ -44,8 +44,8 @@ private
     GameController.bomb_positions[uuid] = position unless uuid.nil?
   end
   
-  def receive_player_bomb_detonate(message, uuid)
-    GameController.bomb_positions[uuid] = nil unless uuid.nil?
+  def receive_send_bomb_detonate(message, uuid)
+    GameController.bomb_positions.delete(uuid) unless uuid.nil?
   end
   
 end

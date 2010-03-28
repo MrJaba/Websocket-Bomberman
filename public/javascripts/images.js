@@ -50,4 +50,7 @@ GameImages.prototype = {
 	
 };
 
-$(document).ready( function(){ MrJaba.Bomberman.Images = new GameImages(['images/tiles/StoneBlock.png', 'images/tiles/WallBlockTall.png','images/CharacterBoy.png', 'images/Bomb.png']).initialize();});
+$(document).ready( function(){ 
+	var images = ['images/tiles/StoneBlock.png', 'images/tiles/WallBlockTall.png','images/CharacterBoy.png', 'images/Bomb.png', 'images/FireBall.png']
+	MrJaba.Bomberman.Images = new GameImages(images).initialize();
+	});
