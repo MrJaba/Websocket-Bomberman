@@ -12,13 +12,16 @@ Explosion.prototype = {
 	draw:function(){
 		var explosion = this;
 		$.each([0,1,2,3], function(direction){
-			$.each([0,1,2], function(frame){
-				var drawX = explosion.drawXPosition( direction, frame ); 
-				var drawY = explosion.drawYPosition( direction, frame );
-				if( explosion.canDrawInTile(drawX, drawY) && drawX >= -20 && drawX < explosion.canvas.width && drawY >= -40 && drawY < explosion.canvas.height ){
+			for( var frame = 0; frame < 2; frame ++ ){
+				var drawX = explosion.drawXPosition( direction, frame ) + explosion.x; 
+				var drawY = explosion.drawYPosition( direction, frame ) + explosion.y;
+				var canDrawInTile = explosion.canDrawInTile(drawX, drawY);
+				if( canDrawInTile && drawX >= -20 && drawX < explosion.canvas.width && drawY >= -40 && drawY < explosion.canvas.height ){
 					explosion.canvas.getContext('2d').drawImage(explosion.img, frame * explosion.frameWidth, direction * explosion.frameHeight, explosion.frameWidth, explosion.frameHeight, drawX + 10, drawY +40, explosion.frameWidth, explosion.frameHeight);
+				}else{
+					break;
 				}
-			})			
+			}			
 		})		
 	},
 	
