@@ -83,6 +83,10 @@ MrJaba.Bomberman = function(){
 		});
 	}
 	
+	function killPlayer(uuid){
+		delete MrJaba.Bomberman.opponents[uuid];		
+	}
+	
 	function initCharacter(id){
 		var me = new Sprite();
 		me.initialize(id, MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvasNode());
@@ -119,6 +123,17 @@ MrJaba.Bomberman = function(){
 			MrJaba.Bomberman.explosions[bomb.getId()] = explosion;
 		},
 		
+		killPlayersAt:function( tileX, tileY ){
+			var opponents = MrJaba.Bomberman.opponents;
+			$.each(opponents, function(uuid, position){
+				var opponentTileY = parseInt((position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy').height/2)) / MrJaba.Bomberman.Images.visibleTileHeight());
+				var opponentTileX = parseInt((position.x + (MrJaba.Bomberman.Images.getImage('CharacterBoy').width/2)) / MrJaba.Bomberman.Images.tileWidth());
+				if(tileX === opponentTileX && tileY === opponentTileY){
+					killPlayer(uuid);
+				}
+			});
+		},
+		
 		removeExplosion:function(explosion){
 			delete MrJaba.Bomberman.explosions[explosion.getId()];
 		},
@@ -129,7 +144,7 @@ MrJaba.Bomberman = function(){
 		
 		updateOpponentPositions: function(positions){
 			$.each(positions, function(uuid, position){
-				if( uuid !== MrJaba.Bomberman.uuid ){ MrJaba.Bomberman.opponents[uuid] = position; }
+				if( uuid !== MrJaba.Bomberman.uuid ){ MrJaba.Bomberman.opponents[uuid] = {x: parseInt(position.x), y:parseInt(position.y)} }
 			})
 		},
 		

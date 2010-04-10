@@ -39,7 +39,7 @@ Explosion.prototype = {
 	},
 	
 	tick:function(){
-		this.checkForKills();
+		this.sendHotBurningDeath();
 		if( this.frame < this.frameCount ){
 			this.frame += 1;
 		}
@@ -48,7 +48,9 @@ Explosion.prototype = {
 		}
 	},
 	
-	checkForKills:function(){
-		
+	sendHotBurningDeath:function(){
+		this.tilesAround( this.getTileX(), this.getTileY(), function(tileX, tileY, direction, radius){
+			MrJaba.Bomberman.killPlayersAt( tileX, tileY );
+		});		
 	}
 }
