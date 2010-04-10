@@ -25,6 +25,9 @@ MrJaba.Bomberman = function(){
 		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
 			bomb.tick();
 		});
+		$.each(MrJaba.Bomberman.explosions, function(uuid, explosion){
+			explosion.tick();
+		});
 	}
 	
 	function draw(){
@@ -114,6 +117,10 @@ MrJaba.Bomberman = function(){
 			protoSprite.initialize(bomb.getId(), MrJaba.Bomberman.Images.getImage('FireBall'), MrJaba.Bomberman.canvas);
 			var explosion = $.extend(protoSprite, new Explosion(tileX, tileY));
 			MrJaba.Bomberman.explosions[bomb.getId()] = explosion;
+		},
+		
+		removeExplosion:function(explosion){
+			delete MrJaba.Bomberman.explosions[explosion.getId()];
 		},
 		
 		addBomb:function(uuid, bomb){
