@@ -38,6 +38,10 @@ var GameClient = function(){
 		return uuid;
 	}
 	
+	var notifyPlayerKill = function(uuid){
+		return {killed:uuid};
+	}
+	
 	var handleEvent = function(eventName, message){
     var handler = callbacks[eventName];
     if(typeof handler === undefined) return;   
@@ -60,6 +64,7 @@ var GameClient = function(){
 	this.bind('update_bombs', updateBombPositions);
 	this.bind('send_bomb_drop', notifyBombDrop);
 	this.bind('send_bomb_detonate', notifyBombDetonate);
+	this.bind('send_kill_player', notifyPlayerKill);
 }
 
 $(document).bind( 'initDone', function(){ MrJaba.Bomberman.GameClient = new GameClient() } );

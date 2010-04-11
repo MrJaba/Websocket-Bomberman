@@ -84,7 +84,8 @@ MrJaba.Bomberman = function(){
 	}
 	
 	function killPlayer(uuid){
-		delete MrJaba.Bomberman.opponents[uuid];		
+		delete MrJaba.Bomberman.opponents[uuid];
+		MrJaba.Bomberman.GameClient.trigger('send_kill_player', uuid);
 	}
 	
 	function initCharacter(id){
@@ -143,8 +144,11 @@ MrJaba.Bomberman = function(){
 		},
 		
 		updateOpponentPositions: function(positions){
+			$("#scores").html("");
 			$.each(positions, function(uuid, position){
 				if( uuid !== MrJaba.Bomberman.uuid ){ MrJaba.Bomberman.opponents[uuid] = {x: parseInt(position.x), y:parseInt(position.y)} }
+				var style = ( uuid === MrJaba.Bomberman.uuid ) ? "background-color:red;" : ""
+				$("#scores").prepend("<ul style='"+style+"'>"+uuid+':'+position.score+"</ul>");
 			})
 		},
 		
