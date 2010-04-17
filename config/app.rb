@@ -1,7 +1,7 @@
 module Bomberman
   App = 
   Rack::Builder.new do
-    use Rack::CommonLogger    
+    use Rack::CommonLogger
     routes = Usher::Interface.for(:rack) do
       add('/game').to GameController
       add('/').to     RootController

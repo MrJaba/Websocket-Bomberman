@@ -54,7 +54,9 @@ var GameClient = function(){
 
 	this.trigger = function(eventName, data){	
 		var data = JSON.stringify({type:eventName, uuid:MrJaba.Bomberman.uuid , data:handleEvent(eventName, data) });
-		socket.send(data);
+		console.log(eventName+' '+socket.readyState+' '+data);
+		var result = socket.send(data);
+		console.log(result);
 	};
 	
 	initWebSocket();	

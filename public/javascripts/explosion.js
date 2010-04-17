@@ -7,6 +7,7 @@ function Explosion(x, y){
 	this.frameCount = 5;
 	this.direction = 0;
 	this.maxRadius = 3;
+	this.killed = [];
 };
 
 Explosion.prototype = {
@@ -39,7 +40,7 @@ Explosion.prototype = {
 	},
 	
 	tick:function(){
-		this.sendHotBurningDeath();
+		if( this.thisIsMyBomb() ) { this.sendHotBurningDeath(); }
 		if( this.frame < this.frameCount ){
 			this.frame += 1;
 		}
@@ -49,8 +50,13 @@ Explosion.prototype = {
 	},
 	
 	sendHotBurningDeath:function(){
+		var alreadyKilled = this.killed;
 		this.tilesAround( this.getTileX(), this.getTileY(), function(tileX, tileY, direction, radius){
-			MrJaba.Bomberman.killPlayersAt( tileX, tileY );
+			MrJaba.Bomberman.killPlayersAt( tileX, tileY, alreadyKilled );
 		});		
+	},
+	
+	thisIsMyBomb:function(){
+		return MrJaba.Bomberman.uuid === this.id;
 	}
 }
