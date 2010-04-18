@@ -88,13 +88,17 @@ Sprite.prototype = {
 	canMoveTo:function(newX, newY){
 		var tileX = this.getTileX(newX);
 		var tileY = this.getTileY(newY);
-		//if( this.inSameTile(tileX, tileY) ){ return true; }
 		if( tileX < MrJaba.Bomberman.map.length && tileY < MrJaba.Bomberman.map[tileX].length){
 			var intoTile = MrJaba.Bomberman.map[tileX][tileY];
-			var containsBomb = MrJaba.Bomberman.mapContainsBombAt(tileX, tileY);
-			return intoTile.walkable && !containsBomb && newX >= 0 && newX < this.canvas.width && newY >= -40 && newY < this.canvas.height;
+			var bomb = MrJaba.Bomberman.fetchBombAt(tileX, tileY);
+			if( this.canEscapeFromTheBombIJustDropped(tileX, tileY, bomb) ){ return true; }
+			return intoTile.walkable && bomb === null && newX >= 0 && newX < this.canvas.width && newY >= -40 && newY < this.canvas.height;
 		}
 		return false;
+	},
+	
+	canEscapeFromTheBombIJustDropped:function(tileX, tileY, bomb){
+		return this.inSameTile(tileX, tileY) && bomb !== null && bomb.getId() === MrJaba.Bomberman.uuid;
 	},
 	
 	inSameTile:function(newTileX, newTileY){

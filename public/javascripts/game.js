@@ -153,18 +153,18 @@ MrJaba.Bomberman = function(){
 			})
 		},
 		
-		mapContainsBombAt: function(x, y){
-			var containsBomb = false;
+		fetchBombAt: function(x, y){
+			var mapBomb = null;
 			$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
 				var bombX = (bomb.getX() + bomb.frameWidth/2);
 				var bombY = (bomb.getY() + MrJaba.Bomberman.Images.getImage('Bomb').height/2);
 				var boardX = parseInt(bombX / MrJaba.Bomberman.Images.tileWidth());
 				var boardY = parseInt(bombY / MrJaba.Bomberman.Images.visibleTileHeight());
-				if( !containsBomb && boardX === x && boardY === y){
-					containsBomb = true;
+				if( mapBomb === null && boardX === x && boardY === y){
+					mapBomb = bomb;
 				}
 			})
-			return containsBomb;
+			return mapBomb;
 		},
 		
 		updateBombPositions: function(positions){
