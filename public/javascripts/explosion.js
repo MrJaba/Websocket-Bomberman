@@ -19,7 +19,7 @@ Explosion.prototype = {
 			var drawX = tileX * self.frameWidth;
 			var drawY = tileY * self.frameHeight;
 			if( drawX >= -20 && drawX < self.canvas.width && drawY >= -40 && drawY < self.canvas.height ){
-				self.canvas.getContext('2d').drawImage(self.img, drawFrame * self.frameWidth, direction * self.frameHeight, self.frameWidth, self.frameHeight, drawX + 10, drawY +40, self.frameWidth, self.frameHeight);
+				self.canvas.getContext('2d').drawImage(self.img, drawFrame * self.frameWidth, direction * self.frameHeight, self.frameWidth, self.frameHeight, drawX + 15, drawY, self.frameWidth, self.frameHeight);
 			}
 		});
 	},
@@ -36,7 +36,7 @@ Explosion.prototype = {
 	},
 	
 	containsObstruction: function(tileX, tileY){
-		return !( tileX >= 0 && tileY >= 0 && tileX < MrJaba.Bomberman.map.length && tileY < MrJaba.Bomberman.map[tileX].length && MrJaba.Bomberman.map[tileX][tileY].walkable)
+		return !( tileX >= 0 && tileY >= 0 && tileX < MrJaba.Bomberman.map.length && tileY < MrJaba.Bomberman.map.length && MrJaba.Bomberman.map[tileY][tileX].walkable)
 	},
 	
 	tick:function(){

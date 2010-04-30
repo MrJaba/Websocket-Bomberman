@@ -60,7 +60,7 @@ MrJaba.Bomberman = function(){
 		if( MrJaba.Bomberman.me !== undefined ){
 			drawBombsAndExplosions(row);
 			drawOpponents(row);			
-			if( MrJaba.Bomberman.me.getRow() === row){ MrJaba.Bomberman.me.draw(); }
+			if( MrJaba.Bomberman.me.getTileY() === row){ MrJaba.Bomberman.me.draw(); }
 		}
 	}
 	
@@ -76,10 +76,12 @@ MrJaba.Bomberman = function(){
 	
 	function drawBombsAndExplosions(row){
 		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
-			if(bomb.getRow() === row){ bomb.draw(); }
+			console.log("bomb:"+bomb.getTileY() +" "+ row+" "+ bomb.getTileX()+" "+bomb.getTileY());
+			if(bomb.getTileY() === row){ bomb.draw(); }
 		});
 		$.each(MrJaba.Bomberman.explosions, function(uuid, explosion){
-			if(explosion.getRow() === row){ explosion.draw(); }
+			console.log("explosion:"+explosion.getTileY() +" "+ row +" "+explosion.getTileX() +" "+explosion.getTileY());
+			if(explosion.getTileY() === row){ explosion.draw(); }
 		});
 	}
 	

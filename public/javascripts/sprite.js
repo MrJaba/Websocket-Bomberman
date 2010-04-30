@@ -80,11 +80,6 @@ Sprite.prototype = {
 		this.canvas.getContext('2d').drawImage(this.img,this.x,this.y,101,171);
 	},
 	
-	getRow:function(){
-		var boardY = this.y + (this.img.height/2);
-		return parseInt( boardY / MrJaba.Bomberman.Images.visibleTileHeight() );
-	},
-	
 	canMoveTo:function(newX, newY){
 		var tileX = this.getTileX(newX);
 		var tileY = this.getTileY(newY);
