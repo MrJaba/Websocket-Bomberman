@@ -89,6 +89,19 @@ MrJaba.Bomberman = function(){
 		MrJaba.Bomberman.GameClient.trigger('send_kill_player', uuid);
 	}
 	
+	function isOpponent(uuid){
+		return uuid !== MrJaba.Bomberman.uuid;
+	}
+	
+	function iAmRestarting(uuid, position){
+		return (uuid === MrJaba.Bomberman.uuid && position.state === "restart");
+	}
+	
+	function restartMe(position){
+		MrJaba.Bomberman.me.setX(parseInt(position.x)); MrJaba.Bomberman.me.setY(parseInt(position.y))		
+		MrJaba.Bomberman.GameClient.trigger('send_reset_state', "restart");
+	}
+	
 	function initCharacter(id){
 		var me = new Sprite();
 		me.initialize(id, MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvasNode());
@@ -149,7 +162,8 @@ MrJaba.Bomberman = function(){
 		updateOpponentPositions: function(positions){
 			$("#scores").html("");
 			$.each(positions, function(uuid, position){
-				if( uuid !== MrJaba.Bomberman.uuid ){ MrJaba.Bomberman.opponents[uuid] = {x: parseInt(position.x), y:parseInt(position.y)} }
+				if( isOpponent(uuid) ){ MrJaba.Bomberman.opponents[uuid] = {x:parseInt(position.x), y:parseInt(position.y)} }
+				if( iAmRestarting(uuid, position) ){ restartMe(position); }
 				var style = ( uuid === MrJaba.Bomberman.uuid ) ? "background-color:red;" : ""
 				$("#scores").prepend("<ul style='"+style+"'>"+uuid+':'+position.score+"</ul>");
 			})

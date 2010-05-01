@@ -31,7 +31,7 @@ private
 
   def receive_register(message, uuid=nil)
     player_uuid = UUID.new.generate
-    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :state => 'restart', :score => 0}
+    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :score => 0}
     render ({:type => 'uuid', :uuid => player_uuid, :class_id => self.object_id}).to_json
   end
   
@@ -51,6 +51,10 @@ private
   def receive_send_kill_player(message, uuid)
     GameController.player_states[uuid][:score] += 1
     restart_player(message['data']['killed'])
+  end
+  
+  def receive_send_reset_state(message, uuid)
+    GameController.player_states[uuid].delete(:state)
   end
   
   def restart_player(uuid)
