@@ -31,8 +31,11 @@ MrJaba.Bomberman = function(){
 	}
 	
 	function draw(){
+		canvas().save();
+		canvas().scale(0.6,0.6);
 		drawBaseTiles();
 		drawHighWallsAndSprites();
+		canvas().restore();
 	}
 	
 	function drawBaseTiles(){
@@ -102,6 +105,17 @@ MrJaba.Bomberman = function(){
 		MrJaba.Bomberman.GameClient.trigger('send_reset_state', "restart");
 	}
 	
+	function sortScores(){
+		var mylist = $('#scores');
+		var listitems = mylist.children('li').get();
+		listitems.sort(function(a, b) {
+		   var compA = $(a).text().toUpperCase();
+		   var compB = $(b).text().toUpperCase();
+		   return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+		})
+		$.each(listitems, function(idx, itm) { mylist.prepend(itm); });
+	}
+	
 	function initCharacter(id){
 		var me = new Sprite();
 		me.initialize(id, MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvasNode());
@@ -164,9 +178,10 @@ MrJaba.Bomberman = function(){
 			$.each(positions, function(uuid, position){
 				if( isOpponent(uuid) ){ MrJaba.Bomberman.opponents[uuid] = {x:parseInt(position.x), y:parseInt(position.y)} }
 				if( iAmRestarting(uuid, position) ){ restartMe(position); }
-				var style = ( uuid === MrJaba.Bomberman.uuid ) ? "background-color:red;" : ""
-				$("#scores").prepend("<ul style='"+style+"'>"+uuid+':'+position.score+"</ul>");
+				var li_class = ( uuid === MrJaba.Bomberman.uuid ) ? "me" : "opponent"
+				$("#scores").prepend("<li class='"+li_class+"'><span class='score'>"+position.score+"</span><span class='uuid'>"+uuid+"</span></li>");
 			})
+			sortScores();
 		},
 		
 		fetchBombAt: function(x, y){

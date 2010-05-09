@@ -1,0 +1,41 @@
+body {
+	background:url('/images/retro-tv.jpg') no-repeat 25% 5%;
+}
+
+#map {
+	display:none;
+}
+
+#canvas{
+	position:relative;
+	float:left;
+	top:10%;
+	left:19%;
+}
+
+#score-holder{
+	float:right;
+}
+
+#score-holder h3{
+	border-bottom:1px solid black
+}
+
+#score-holder ul#scores{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+#score-holder ul#scores li span.score{
+	font-size:2em;
+}
+
+#score-holder ul#scores li span.uuid{
+	
+}
+
+#score-holder ul#scores li.me{
+	background-color:red;
+}
+
