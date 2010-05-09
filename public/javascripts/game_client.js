@@ -11,7 +11,7 @@ var GameClient = function(){
 		socket.onmessage = function(evt){
 			var data = JSON.parse(evt.data)
 			handleEvent( data['type'], data );
-		};		
+		};
 	}	
 	
 	var notifyPlayerMove = function(){

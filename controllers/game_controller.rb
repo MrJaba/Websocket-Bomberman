@@ -2,6 +2,7 @@ require 'ruby-debug'
 class GameController < Cramp::Controller::Websocket
   periodic_timer :push_states, :every => 0.1
   periodic_timer :push_bombs, :every => 0.1
+  periodic_timer :cleanup, :every => 1
   on_data :receive_message
   class << self
     attr_accessor :player_states 
@@ -14,6 +15,7 @@ class GameController < Cramp::Controller::Websocket
     message = JSON.parse(data)
     type = message['type']    
     uuid = message['uuid']
+    update_last_message_time(uuid)
     self.send("receive_#{type}", message, uuid)
   end
 
@@ -31,7 +33,7 @@ private
 
   def receive_register(message, uuid=nil)
     player_uuid = UUID.new.generate
-    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :score => 0}
+    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :score => 0, :last_message_time => Time.now}
     render ({:type => 'uuid', :uuid => player_uuid, :class_id => self.object_id}).to_json
   end
   
@@ -61,6 +63,23 @@ private
     GameController.player_states[uuid][:x] = 0
     GameController.player_states[uuid][:y] = 0
     GameController.player_states[uuid][:state] = 'restart'
+  end
+  
+  def cleanup
+    states = GameController.player_states.dup
+    states.each_pair do |uuid, state|
+      GameController.player_states.delete(uuid) if timed_out?(state)
+    end
+  end
+  
+  def timed_out?(player_state)
+    (Time.now - player_state[:last_message_time]) > 20
+  end
+  
+  def update_last_message_time(uuid)
+    if( uuid && GameController.player_states[uuid] )
+      GameController.player_states[uuid][:last_message_time] = Time.now
+    end
   end
   
 end

@@ -181,6 +181,12 @@ MrJaba.Bomberman = function(){
 				var li_class = ( uuid === MrJaba.Bomberman.uuid ) ? "me" : "opponent"
 				$("#scores").prepend("<li class='"+li_class+"'><span class='score'>"+position.score+"</span><span class='uuid'>"+uuid+"</span></li>");
 			})
+			var tmpOpponents = MrJaba.Bomberman.opponents;
+			$.each(tmpOpponents, function(uuid, position){
+				if(positions[uuid] === undefined){
+					delete MrJaba.Bomberman.opponents[uuid];
+				}
+			})
 			sortScores();
 		},
 		
