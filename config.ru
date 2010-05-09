@@ -1,0 +1,1 @@
+require 'bomberman_server'
