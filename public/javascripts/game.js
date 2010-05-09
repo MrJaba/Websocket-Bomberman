@@ -11,8 +11,8 @@ MrJaba.Bomberman = function(){
 	
 	function initCanvas(){
 		var c = canvasNode();
-		c.width = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileWidth());
-		c.height = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileHeight());
+		c.width = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileWidth() * 0.6 );
+		c.height = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.visibleTileHeight());
 		draw();
 		return c;
 	}

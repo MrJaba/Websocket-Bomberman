@@ -1,4 +1,3 @@
-require 'ruby-debug'
 class GameController < Cramp::Controller::Websocket
   periodic_timer :push_states, :every => 0.1
   periodic_timer :push_bombs, :every => 0.1
@@ -8,6 +7,7 @@ class GameController < Cramp::Controller::Websocket
     attr_accessor :player_states 
     attr_accessor :bomb_positions 
   end
+  TIMEOUT = 20
   @player_states = {}
   @bomb_positions = {}
   
@@ -73,7 +73,7 @@ private
   end
   
   def timed_out?(player_state)
-    (Time.now - player_state[:last_message_time]) > 20
+    (Time.now - player_state[:last_message_time]) > TIMEOUT
   end
   
   def update_last_message_time(uuid)

@@ -1,5 +1,10 @@
-body {
-	background:url('/images/retro-tv.jpg') no-repeat 25% 5%;
+
+
+#container{
+	background:url('/images/retro-tv.jpg') no-repeat 25% 5%;	
+	width:948px;
+	height:650px;
+	float:left;
 }
 
 #map {
@@ -8,13 +13,13 @@ body {
 
 #canvas{
 	position:relative;
-	float:left;
-	top:10%;
-	left:19%;
+	top:12%;
+	left:17%;
 }
 
 #score-holder{
 	float:right;
+	clear:right;
 }
 
 #score-holder h3{
@@ -39,3 +44,9 @@ body {
 	background-color:red;
 }
 
+#footer{
+	float:left;
+	margin-left:25%;
+	margin-top:2%;
+	clear:left;
+}

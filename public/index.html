@@ -11,6 +11,8 @@
 	<script src="javascripts/sprite.js" type="text/javascript"></script>
 	<script src="javascripts/movement.js" type="text/javascript"></script>
 	<link rel="Stylesheet" href="/css/bomberman.css" type="text/css" media="screen"/>	
+	<link rel="Stylesheet" href="/css/reset.css" type="text/css" media="screen"/>	
+	<link rel="Stylesheet" href="/css/typography.css" type="text/css" media="screen"/>	
 	
 </head>
 <body>
@@ -24,12 +26,18 @@
 		<tr><td>StoneBlock</td><td>StoneBlock</td><td>StoneBlock</td><td>StoneBlock</td><td>StoneBlock</td><td>StoneBlock</td><td>StoneBlock</td></tr>
 	</table>
 	
-	<canvas id="canvas"></canvas>
+	<div id="container">
+		<canvas id="canvas"></canvas>
+	</div>
 	
 	<div id="score-holder">
 		<h3>Score</h3>
-		<ul id="scores">
-		</ul>
+		<ul id="scores"></ul>
+	</div>
+	
+	<div id="footer">
+		<div>Created By MrJaba, Code available on github:<a href="http://github.com/MrJaba/Websocket-Bomberman">Websocket Bomberman</a></div>
+		<div>Requires an HTML5 compatible browser.</div>
 	</div>
 	
 </body>
