@@ -1,6 +1,5 @@
 #Framework initialization
 require 'rubygems'
-require 'ruby-debug'
 require 'usher'
 require 'cramp/controller'
 require 'uuid'

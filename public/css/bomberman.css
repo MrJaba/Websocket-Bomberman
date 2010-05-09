@@ -46,7 +46,8 @@
 
 #footer{
 	float:left;
-	margin-left:25%;
+	margin-left:15%;
 	margin-top:2%;
 	clear:left;
+	text-align:center;
 }
