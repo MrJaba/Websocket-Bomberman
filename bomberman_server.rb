@@ -11,4 +11,4 @@ require 'controllers/game_controller'
 require 'config/app'
 
 Cramp::Controller::Websocket.backend = :thin
-Rack::Handler::Thin.run Bomberman::App
+run Bomberman::App
