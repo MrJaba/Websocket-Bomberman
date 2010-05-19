@@ -1,0 +1,7 @@
+# Ignore all dotfiles...
+.*
+# except for .gitignore
+!.gitignore
+
+# Will exclude all .log files
+*.log

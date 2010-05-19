@@ -1,6 +1,5 @@
 var GameClient = function(){
-	
-	var socket = new WebSocket('ws://bomberman.heroku.com/game');
+	var socket = new WebSocket('ws://'+location.host+'/game');
 	var callbacks = {};
 	
 	var initWebSocket = function(){		
