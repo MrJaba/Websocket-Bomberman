@@ -1,6 +1,6 @@
 class GameController < Cramp::Controller::Websocket
-  periodic_timer :push_states, :every => 0.1
-  periodic_timer :push_bombs, :every => 0.1
+  periodic_timer :push_states, :every => 0.05
+  periodic_timer :push_bombs, :every => 0.05
   periodic_timer :cleanup, :every => 1
   on_data :receive_message
   class << self
@@ -38,7 +38,9 @@ private
   end
   
   def receive_player_move(message, uuid)
-    GameController.player_states[uuid].merge!({:x => message['data']['x'], :y => message['data']['y']}) unless uuid.nil?
+    if( uuid && GameController.player_states[uuid] )
+      GameController.player_states[uuid].merge!({:x => message['data']['x'], :y => message['data']['y']})
+    end
   end
   
   def receive_send_bomb_drop(message, uuid)
