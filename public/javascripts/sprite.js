@@ -3,6 +3,8 @@ Sprite.prototype = {
 	initialize:function(id, image, canvas) {
 		this.id = id;
 		this.img = image;
+		this.imgWidth = image.width;
+		this.imgHeight = image.height;
 		this.canvas = canvas;
 		this.x = 0;
 		this.y = -40;
@@ -35,7 +37,7 @@ Sprite.prototype = {
 	},
 	
 	getFrameWidth:function(){
-		return (this.frameWidth || this.img.width);
+		return (this.frameWidth || this.imgWidth);
 	},
 
 	getY:function() {
@@ -53,7 +55,7 @@ Sprite.prototype = {
 	},
 	
 	getFrameHeight:function(){
-		return (this.frameHeight || this.img.height);
+		return (this.frameHeight || this.imgHeight);
 	},
 	
 	moveLeft:function(offset){

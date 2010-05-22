@@ -51,6 +51,7 @@ GameImages.prototype = {
 };
 
 $(document).ready( function(){ 
-	var images = ['images/tiles/StoneBlock.png', 'images/tiles/WallBlockTall.png','images/CharacterBoy.png', 'images/Bomb.png', 'images/FireBall.png']
-	MrJaba.Bomberman.Images = new GameImages(images).initialize();
+	var playerImages = ['images/CharacterBoy-blue.png','images/CharacterBoy-brown.png','images/CharacterBoy-red.png','images/CharacterBoy-yellow.png'];
+	var images = ['images/tiles/StoneBlock.png', 'images/tiles/WallBlockTall.png', 'images/Bomb.png', 'images/FireBall.png'];
+	MrJaba.Bomberman.Images = new GameImages(images.concat(playerImages)).initialize();
 	});

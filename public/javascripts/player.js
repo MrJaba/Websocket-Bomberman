@@ -6,6 +6,12 @@ Player.prototype = {
 		protoSprite.initialize(MrJaba.Bomberman.uuid, MrJaba.Bomberman.Images.getImage('Bomb'), this.canvas );
 		var bomb = $.extend(protoSprite, new Bomb(this.x, this.y));
 		MrJaba.Bomberman.addBomb(MrJaba.Bomberman.uuid, bomb);
+	},
+	
+	setImage:function(newImage){
+		this.imgHeight = newImage.height;
+		this.imgWidth = newImage.width;
+		this.img = newImage;		
 	}
 	
 };

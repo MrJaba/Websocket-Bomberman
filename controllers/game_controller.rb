@@ -8,6 +8,7 @@ class GameController < Cramp::Controller::Websocket
     attr_accessor :bomb_positions 
   end
   TIMEOUT = 20
+  COLOURS = %w{ blue brown red yellow }
   @player_states = {}
   @bomb_positions = {}
   
@@ -31,10 +32,11 @@ class GameController < Cramp::Controller::Websocket
   
 private
 
-  def receive_register(message, uuid=nil)
+  def receive_register(message, null_uuid=nil)
     player_uuid = UUID.new.generate
-    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :score => 0, :last_message_time => Time.now}
-    render ({:type => 'uuid', :uuid => player_uuid, :class_id => self.object_id}).to_json
+    player_colour = COLOURS[GameController.player_states.size] rescue COLOURS.first
+    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :score => 0, :last_message_time => Time.now, :player_colour => player_colour}
+    render ({:type => 'register', :uuid => player_uuid, :colour => player_colour}).to_json
   end
   
   def receive_player_move(message, uuid)

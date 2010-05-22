@@ -17,8 +17,8 @@ var GameClient = function(){
 		return MrJaba.Bomberman.me.position();
 	}
 	
-	var receiveUuid = function(data){
-		MrJaba.Bomberman.uuid = data['uuid'];
+	var receiveRegister = function(data){
+		MrJaba.Bomberman.registerPlayer(data)
 	}
 	
 	var updateOpponentPositions = function(data){
@@ -64,7 +64,7 @@ var GameClient = function(){
 	
 	initWebSocket();	
 	this.bind('player_move', notifyPlayerMove);
-	this.bind('uuid', receiveUuid);
+	this.bind('register', receiveRegister);
 	this.bind('update_positions', updateOpponentPositions);
 	this.bind('update_bombs', updateBombPositions);
 	this.bind('send_bomb_drop', notifyBombDrop);

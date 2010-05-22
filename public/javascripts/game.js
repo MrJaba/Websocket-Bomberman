@@ -69,10 +69,10 @@ MrJaba.Bomberman = function(){
 	
 	function drawOpponents(row){
 		$.each(MrJaba.Bomberman.opponents, function(uuid, position){
-			var boardY = position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy').height/2);
+			var boardY = position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy-brown').height/2);
 			var opRow =  parseInt( boardY / MrJaba.Bomberman.Images.visibleTileHeight() );
 			if( opRow == row ){
-				canvas().drawImage(MrJaba.Bomberman.Images.getImage('CharacterBoy'),position.x, position.y, 101,171); 
+				canvas().drawImage(MrJaba.Bomberman.Images.getImage('CharacterBoy-brown'),position.x, position.y, 101,171); 
 			}
 		});
 	}
@@ -118,7 +118,7 @@ MrJaba.Bomberman = function(){
 	
 	function initCharacter(id){
 		var me = new Sprite();
-		me.initialize(id, MrJaba.Bomberman.Images.getImage('CharacterBoy'), canvasNode());
+		me.initialize(id, MrJaba.Bomberman.Images.getImage('CharacterBoy-brown'), canvasNode());
 		return me;
 	}
 	
@@ -155,8 +155,8 @@ MrJaba.Bomberman = function(){
 		killPlayersAt:function( tileX, tileY, alreadyKilled ){
 			var opponents = MrJaba.Bomberman.opponents;
 			$.each(opponents, function(uuid, position){
-				var opponentTileY = parseInt((position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy').height/2)) / MrJaba.Bomberman.Images.visibleTileHeight());
-				var opponentTileX = parseInt((position.x + (MrJaba.Bomberman.Images.getImage('CharacterBoy').width/2)) / MrJaba.Bomberman.Images.tileWidth());
+				var opponentTileY = parseInt((position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy-brown').height/2)) / MrJaba.Bomberman.Images.visibleTileHeight());
+				var opponentTileX = parseInt((position.x + (MrJaba.Bomberman.Images.getImage('CharacterBoy-brown').width/2)) / MrJaba.Bomberman.Images.tileWidth());
 				if(tileX === opponentTileX && tileY === opponentTileY && $.inArray( uuid, alreadyKilled ) == -1){
 					console.log(uuid);
 					alreadyKilled.push(uuid);
@@ -213,6 +213,11 @@ MrJaba.Bomberman = function(){
 					MrJaba.Bomberman.bombs[uuid] = bomb;
 				}
 			})
+		},
+		
+		registerPlayer:function(registration){
+			MrJaba.Bomberman.uuid = registration['uuid'];
+			MrJaba.Bomberman.me.setImage(MrJaba.Bomberman.Images.getImage('CharacterBoy-'+registration['colour']));
 		},
 		
 		initialize: function(){
