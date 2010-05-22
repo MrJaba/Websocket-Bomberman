@@ -50,7 +50,7 @@ Sprite.prototype = {
 	
 	getTileY:function(newY){
 		var newY = newY || this.getY();
-		var boardY = (newY + (this.getFrameHeight()/2));
+		var boardY = (newY + (MrJaba.Bomberman.Images.visibleTileHeight()/2));
 		return parseInt(boardY / MrJaba.Bomberman.Images.visibleTileHeight());
 	},
 

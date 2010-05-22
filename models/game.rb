@@ -16,7 +16,7 @@ class Game
   
   def spawn_point
     case players.size
-      when 0 then [0,0]
+      when 0 then [0,6]
       when 1 then [6,0]
       when 2 then [0,6]
       when 3 then [6,6]
