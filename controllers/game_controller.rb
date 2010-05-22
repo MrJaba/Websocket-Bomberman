@@ -5,10 +5,11 @@ class GameController < Cramp::Controller::Websocket
   on_data :receive_message
   class << self
     attr_accessor :player_states 
+    attr_accessor :games 
     attr_accessor :bomb_positions 
   end
   TIMEOUT = 20
-  COLOURS = %w{ blue brown red yellow }
+  @games = [Game.new]
   @player_states = {}
   @bomb_positions = {}
   
@@ -21,7 +22,7 @@ class GameController < Cramp::Controller::Websocket
   end
 
   def push_states
-    data = {:type => 'update_positions', :positions => GameController.player_states}.to_json
+    data = {:type => 'update_positions', :positions => player_states}.to_json
     render data
   end
   
@@ -34,14 +35,15 @@ private
 
   def receive_register(message, null_uuid=nil)
     player_uuid = UUID.new.generate
-    player_colour = COLOURS[GameController.player_states.size] rescue COLOURS.first
-    GameController.player_states[player_uuid] = {:x => 0, :y => 0, :score => 0, :last_message_time => Time.now, :player_colour => player_colour}
-    render ({:type => 'register', :uuid => player_uuid, :colour => player_colour}).to_json
+    game = GameController.games.last
+    player = game.create_player
+    GameController.player_states[player_uuid] = player
+    render ({:type => 'register', :uuid => player_uuid, :colour => player.colour}).to_json
   end
   
   def receive_player_move(message, uuid)
     if( uuid && GameController.player_states[uuid] )
-      GameController.player_states[uuid].merge!({:x => message['data']['x'], :y => message['data']['y']})
+      GameController.player_states[uuid].update({:x => message['data']['x'], :y => message['data']['y']})
     end
   end
   
@@ -54,21 +56,16 @@ private
     GameController.bomb_positions.delete(uuid) unless uuid.nil?
   end
   
-  def receive_send_kill_player(message, uuid)
-    GameController.player_states[uuid][:score] += 1
-    restart_player(message['data']['killed'])
+  def receive_send_kill_player(message, uuid)    
+    GameController.player_states[uuid].score += 1 if GameController.player_states[uuid]
+    player_killed = message['data']['killed']
+    GameController.player_states[player_killed].respawn(:death) if GameController.player_states[player_killed]
   end
   
   def receive_send_reset_state(message, uuid)
-    GameController.player_states[uuid].delete(:state)
+    GameController.player_states[uuid].clearState
   end
-  
-  def restart_player(uuid)
-    GameController.player_states[uuid][:x] = 0
-    GameController.player_states[uuid][:y] = 0
-    GameController.player_states[uuid][:state] = 'restart'
-  end
-  
+
   def cleanup
     states = GameController.player_states.dup
     states.each_pair do |uuid, state|
@@ -77,12 +74,19 @@ private
   end
   
   def timed_out?(player_state)
-    (Time.now - player_state[:last_message_time]) > TIMEOUT
+    (Time.now - player_state.last_message_time) > TIMEOUT
   end
   
   def update_last_message_time(uuid)
     if( uuid && GameController.player_states[uuid] )
-      GameController.player_states[uuid][:last_message_time] = Time.now
+      GameController.player_states[uuid].last_message_time = Time.now
+    end
+  end
+  
+  def player_states
+    GameController.player_states.inject({}) do |sum, uuid_player|
+      uuid, player = uuid_player
+      sum.merge( {uuid => player.to_param } )
     end
   end
   

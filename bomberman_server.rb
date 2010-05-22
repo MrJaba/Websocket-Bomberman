@@ -8,6 +8,7 @@ require 'json'
 #Application Specifics
 require 'controllers/root_controller'
 require 'controllers/game_controller'
+require 'models/player'
 require 'config/app'
 
 Cramp::Controller::Websocket.backend = :thin

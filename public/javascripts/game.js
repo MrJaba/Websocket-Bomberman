@@ -79,11 +79,9 @@ MrJaba.Bomberman = function(){
 	
 	function drawBombsAndExplosions(row){
 		$.each(MrJaba.Bomberman.bombs, function(uuid, bomb){
-			console.log("bomb:"+bomb.getTileY() +" "+ row+" "+ bomb.getTileX()+" "+bomb.getTileY());
 			if(bomb.getTileY() === row){ bomb.draw(); }
 		});
 		$.each(MrJaba.Bomberman.explosions, function(uuid, explosion){
-			console.log("explosion:"+explosion.getTileY() +" "+ row +" "+explosion.getTileX() +" "+explosion.getTileY());
 			if(explosion.getTileY() === row){ explosion.draw(); }
 		});
 	}
@@ -101,7 +99,7 @@ MrJaba.Bomberman = function(){
 	}
 	
 	function restartMe(position){
-		MrJaba.Bomberman.me.setX(parseInt(position.x)); MrJaba.Bomberman.me.setY(parseInt(position.y))		
+		MrJaba.Bomberman.me.setTileX(parseInt(position.x)); MrJaba.Bomberman.me.setTileY(parseInt(position.y))		
 		MrJaba.Bomberman.GameClient.trigger('send_reset_state', "restart");
 	}
 	
@@ -176,7 +174,7 @@ MrJaba.Bomberman = function(){
 		updateOpponentPositions: function(positions){
 			$("#scores").html("");
 			$.each(positions, function(uuid, position){
-				if( isOpponent(uuid) ){ MrJaba.Bomberman.opponents[uuid] = {x:parseInt(position.x), y:parseInt(position.y), colour:position.player_colour} }
+				if( isOpponent(uuid) ){ MrJaba.Bomberman.opponents[uuid] = {x:parseInt(position.x), y:parseInt(position.y), colour:position.colour} }
 				if( iAmRestarting(uuid, position) ){ restartMe(position); }
 				var li_class = ( uuid === MrJaba.Bomberman.uuid ) ? "me" : "opponent"
 				$("#scores").prepend("<li class='"+li_class+"'><span class='score'>"+position.score+"</span><span class='uuid'>"+uuid+"</span></li>");

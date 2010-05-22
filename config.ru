@@ -17,6 +17,8 @@ require 'uuid'
 require 'json'
 
 #Application Specifics
+require 'models/player'
+require 'models/game'
 require 'controllers/root_controller'
 require 'controllers/game_controller'
 require 'config/app'

@@ -36,6 +36,10 @@ Sprite.prototype = {
 		this.x = parseInt(x);
 	},
 	
+	setTileX:function(tileX){
+		this.x = MrJaba.Bomberman.Images.tileWidth() * parseInt(tileX);
+	},
+	
 	getFrameWidth:function(){
 		return (this.frameWidth || this.imgWidth);
 	},
@@ -52,6 +56,10 @@ Sprite.prototype = {
 
 	setY:function(y) {
 		this.y = parseInt(y);
+	},
+	
+	setTileY:function(tileY){
+		this.y = MrJaba.Bomberman.Images.visibleTileHeight() * parseInt(tileY);		
 	},
 	
 	getFrameHeight:function(){
