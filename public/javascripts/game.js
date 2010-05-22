@@ -69,10 +69,10 @@ MrJaba.Bomberman = function(){
 	
 	function drawOpponents(row){
 		$.each(MrJaba.Bomberman.opponents, function(uuid, position){
-			var boardY = position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy-brown').height/2);
+			var boardY = position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy-'+position.colour).height/2);
 			var opRow =  parseInt( boardY / MrJaba.Bomberman.Images.visibleTileHeight() );
 			if( opRow == row ){
-				canvas().drawImage(MrJaba.Bomberman.Images.getImage('CharacterBoy-brown'),position.x, position.y, 101,171); 
+				canvas().drawImage(MrJaba.Bomberman.Images.getImage('CharacterBoy-'+position.colour),position.x, position.y, 101,171); 
 			}
 		});
 	}
@@ -176,7 +176,7 @@ MrJaba.Bomberman = function(){
 		updateOpponentPositions: function(positions){
 			$("#scores").html("");
 			$.each(positions, function(uuid, position){
-				if( isOpponent(uuid) ){ MrJaba.Bomberman.opponents[uuid] = {x:parseInt(position.x), y:parseInt(position.y)} }
+				if( isOpponent(uuid) ){ MrJaba.Bomberman.opponents[uuid] = {x:parseInt(position.x), y:parseInt(position.y), colour:position.player_colour} }
 				if( iAmRestarting(uuid, position) ){ restartMe(position); }
 				var li_class = ( uuid === MrJaba.Bomberman.uuid ) ? "me" : "opponent"
 				$("#scores").prepend("<li class='"+li_class+"'><span class='score'>"+position.score+"</span><span class='uuid'>"+uuid+"</span></li>");
@@ -216,14 +216,14 @@ MrJaba.Bomberman = function(){
 		},
 		
 		registerPlayer:function(registration){
-			MrJaba.Bomberman.uuid = registration['uuid'];
-			MrJaba.Bomberman.me.setImage(MrJaba.Bomberman.Images.getImage('CharacterBoy-'+registration['colour']));
+			MrJaba.Bomberman.uuid = registration.uuid;
+			MrJaba.Bomberman.me.setImage(MrJaba.Bomberman.Images.getImage('CharacterBoy-'+registration.colour));
 		},
 		
 		initialize: function(){
 			MrJaba.Bomberman.map = readMap();
 			MrJaba.Bomberman.canvas = initCanvas();
-			MrJaba.Bomberman.me = $.extend(new Player(), initCharacter('me') );						
+			MrJaba.Bomberman.me = $.extend(new Player(), initCharacter('me'));						
 			MrJaba.Bomberman.opponents = {};
 			MrJaba.Bomberman.bombs = {};
 			MrJaba.Bomberman.explosions = {};
