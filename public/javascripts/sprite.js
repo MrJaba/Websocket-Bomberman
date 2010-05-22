@@ -87,7 +87,7 @@ Sprite.prototype = {
 	},
 
 	draw:function(){
-		this.canvas.getContext('2d').drawImage(this.img,this.x,this.y,101,171);
+		this.canvas.getContext('2d').drawImage(this.img,this.x,this.y - MrJaba.Bomberman.Images.visibleTileHeight()/2,101,171);
 	},
 	
 	canMoveTo:function(newX, newY){

@@ -9,8 +9,8 @@ function Bomb(x, y){
 
 Bomb.prototype = {
 	draw:function(){
-		var xPos = this.x + (this.frameWidth/2) - 37;
-		var yPos = this.y + (this.img.height/2);
+		var xPos = this.x +10;
+		var yPos = this.y;
 		this.canvas.getContext('2d').drawImage(this.img, this.frame * this.frameWidth, 0, this.frameWidth, 108, xPos, yPos, this.frameWidth, 108)
 	},
 	

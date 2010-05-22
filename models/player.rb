@@ -17,7 +17,7 @@ class Player
   def respawn(cause=:start)
     self.x = self.spawn.first
     self.y = self.spawn.last
-    self.state = 'restart' if cause == :death
+    self.state = 'restart'
   end
   
   def clearState

@@ -16,10 +16,10 @@ Explosion.prototype = {
 		var self = this;
 		this.tilesAround( this.getTileX(), this.getTileY(), function(tileX, tileY, direction, radius){
 			var drawFrame = parseInt(Math.random()*2);
-			var drawX = tileX * self.frameWidth;
-			var drawY = tileY * self.frameHeight;
+			var drawX = tileX * MrJaba.Bomberman.Images.tileWidth();
+			var drawY = tileY * MrJaba.Bomberman.Images.visibleTileHeight() + (self.frameHeight/2);
 			if( drawX >= -20 && drawX < self.canvas.width && drawY >= -40 && drawY < self.canvas.height ){
-				self.canvas.getContext('2d').drawImage(self.img, drawFrame * self.frameWidth, direction * self.frameHeight, self.frameWidth, self.frameHeight, drawX + 15, drawY, self.frameWidth, self.frameHeight);
+				self.canvas.getContext('2d').drawImage(self.img, drawFrame * self.frameWidth, direction * self.frameHeight, self.frameWidth, self.frameHeight, drawX , drawY, self.frameWidth, self.frameHeight);
 			}
 		});
 	},
