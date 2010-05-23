@@ -12,3 +12,4 @@ gem "eventmachine", "0.12.10"
 gem 'usher'
 gem "uuid"
 gem "json"
+gem 'ruby-debug'

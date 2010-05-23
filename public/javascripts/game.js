@@ -166,8 +166,8 @@ MrJaba.Bomberman = function(){
 			delete MrJaba.Bomberman.explosions[explosion.getId()];
 		},
 		
-		addBomb:function(uuid, bomb){
-			MrJaba.Bomberman.bombs[uuid] = bomb;
+		addBomb:function(bomb){
+			MrJaba.Bomberman.bombs[bomb.getId()] = bomb;
 		},
 		
 		updateOpponentPositions: function(positions){
@@ -178,6 +178,7 @@ MrJaba.Bomberman = function(){
 				var li_class = ( uuid === MrJaba.Bomberman.uuid ) ? "me" : "opponent"
 				$("#scores").prepend("<li class='"+li_class+"'><span class='score'>"+position.score+"</span><span class='uuid'>"+uuid+"</span></li>");
 			})
+			//remove opponents that have timed out
 			var tmpOpponents = MrJaba.Bomberman.opponents;
 			$.each(tmpOpponents, function(uuid, position){
 				if(positions[uuid] === undefined){
@@ -202,12 +203,12 @@ MrJaba.Bomberman = function(){
 		},
 		
 		updateBombPositions: function(positions){
-			$.each(positions, function(uuid, position){
-				if(MrJaba.Bomberman.bombs[uuid] === undefined && MrJaba.Bomberman.explosions[uuid] === undefined){ 
+			$.each(positions, function(bombId, bomb){
+				if(MrJaba.Bomberman.bombs[bombId] === undefined && MrJaba.Bomberman.explosions[bombId] === undefined){ 
 					var protoSprite = new Sprite();
-					protoSprite.initialize(uuid, MrJaba.Bomberman.Images.getImage('Bomb'), MrJaba.Bomberman.canvas);
-					var bomb = $.extend(protoSprite, new Bomb(position['x'], position['y']));
-					MrJaba.Bomberman.bombs[uuid] = bomb;
+					protoSprite.initialize(bombId, MrJaba.Bomberman.Images.getImage('Bomb'), MrJaba.Bomberman.canvas);
+					var bomb = $.extend(protoSprite, new Bomb(bomb['x'], bomb['y']));
+					MrJaba.Bomberman.bombs[bombId] = bomb;
 				}
 			})
 		},
@@ -222,7 +223,7 @@ MrJaba.Bomberman = function(){
 			MrJaba.Bomberman.canvas = initCanvas();
 			MrJaba.Bomberman.me = $.extend(new Player(), initCharacter('me'));						
 			MrJaba.Bomberman.opponents = {};
-			MrJaba.Bomberman.bombs = {};
+			MrJaba.Bomberman.bombs = {}
 			MrJaba.Bomberman.explosions = {};
 			$(document).trigger('initDone');
 			setInterval( runGameLoop, 100 );
