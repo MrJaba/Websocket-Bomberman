@@ -11,7 +11,7 @@ MrJaba.Bomberman = function(){
 	
 	function initCanvas(){
 		var c = canvasNode();
-		c.width = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileWidth() );
+		c.width = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.tileWidth());
 		c.height = (MrJaba.Bomberman.map.length * MrJaba.Bomberman.Images.visibleTileHeight());
 		draw();
 		return c;
@@ -156,7 +156,6 @@ MrJaba.Bomberman = function(){
 				var opponentTileY = parseInt((position.y - 40 + (MrJaba.Bomberman.Images.getImage('CharacterBoy-brown').height/2)) / MrJaba.Bomberman.Images.visibleTileHeight());
 				var opponentTileX = parseInt((position.x + (MrJaba.Bomberman.Images.getImage('CharacterBoy-brown').width/2)) / MrJaba.Bomberman.Images.tileWidth());
 				if(tileX === opponentTileX && tileY === opponentTileY && $.inArray( uuid, alreadyKilled ) == -1){
-					console.log(uuid);
 					alreadyKilled.push(uuid);
 					killPlayer(uuid);
 				}
