@@ -2,7 +2,7 @@ require 'ruby-debug'
 class GameController < Cramp::Controller::Websocket
   periodic_timer :push_states, :every => 0.05
   periodic_timer :push_bombs, :every => 0.05
-  #periodic_timer :cleanup, :every => 1
+  periodic_timer :cleanup, :every => 1
   on_data :receive_message
   class << self
     attr_accessor :player_states 
@@ -54,7 +54,8 @@ private
   end
   
   def receive_send_bomb_detonate(message, uuid)
-    GameController.bomb_positions.delete(uuid) unless uuid.nil?
+    bomb_id = message['data']
+    GameController.bomb_positions.delete(bomb_id) unless bomb_id.nil?
   end
   
   def receive_send_kill_player(message, uuid)    
