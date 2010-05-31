@@ -37,11 +37,7 @@ private
 
   def receive_register(message, null_uuid=nil)
     player_uuid = UUID.new.generate
-    game = GameController.games.last
-    if game.nil? || game.full?
-      game = Game.new 
-      GameController.games << game
-    end
+    game = find_or_create_game
     GameController.connection_to_games[self.object_id] = game
     player = game.create_player(player_uuid)
     GameController.player_states[player_uuid] = player
@@ -77,7 +73,10 @@ private
   def cleanup
     states = GameController.player_states.dup
     states.each_pair do |uuid, state|
-      GameController.player_states.delete(uuid) if timed_out?(state)
+      if timed_out?(state)
+        GameController.player_states[uuid].game.delete_player(uuid)
+        GameController.player_states.delete(uuid) 
+      end
     end
   end
   
@@ -93,6 +92,15 @@ private
   
   def game_states
     GameController.connection_to_games[self.object_id].player_states rescue {}
+  end
+  
+  def find_or_create_game
+    game = GameController.games.select{|game| !game.full? }.first
+    if game.nil?
+      game = Game.new 
+      GameController.games << game
+    end
+    game
   end
   
 end

@@ -7,7 +7,11 @@ class Game
   end
   
   def create_player(uuid)
-    (players << Player.new(uuid, player_colour, spawn_point)).last    
+    (players << Player.new(uuid, player_colour, spawn_point, self)).last    
+  end
+  
+  def delete_player(uuid)
+    players.delete_if{|player| player.uuid == uuid}
   end
   
   def player_colour
