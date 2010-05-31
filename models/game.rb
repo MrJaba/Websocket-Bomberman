@@ -6,8 +6,8 @@ class Game
     self.players = []
   end
   
-  def create_player
-    (players << Player.new(player_colour, spawn_point)).last    
+  def create_player(uuid)
+    (players << Player.new(uuid, player_colour, spawn_point)).last    
   end
   
   def player_colour
@@ -21,6 +21,16 @@ class Game
       when 2 then [0,6]
       when 3 then [6,6]
     end
+  end
+  
+  def player_states
+    players.inject({}) do |sum, player|
+      sum.merge( {player.uuid => player.to_param } )
+    end
+  end
+  
+  def full?
+    players.size == 4
   end
  
 end

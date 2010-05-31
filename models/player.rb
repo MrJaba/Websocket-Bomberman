@@ -1,7 +1,8 @@
 class Player
-  attr_accessor :x, :y ,:score, :last_message_time, :colour, :spawn, :state
+  attr_accessor :uuid, :x, :y ,:score, :last_message_time, :colour, :spawn, :state
   
-  def initialize(colour, spawn)
+  def initialize(uuid, colour, spawn)
+    self.uuid = uuid
     self.spawn = spawn
     self.score = 0
     self.last_message_time = Time.now

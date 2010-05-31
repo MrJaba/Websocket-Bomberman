@@ -1,16 +1,17 @@
-require 'ruby-debug'
 class GameController < Cramp::Controller::Websocket
   periodic_timer :push_states, :every => 0.05
   periodic_timer :push_bombs, :every => 0.05
-  periodic_timer :cleanup, :every => 1
+  #periodic_timer :cleanup, :every => 1
   on_data :receive_message
   class << self
     attr_accessor :player_states 
     attr_accessor :games 
     attr_accessor :bomb_positions 
+    attr_accessor :connection_to_games
   end
   TIMEOUT = 20
-  @games = [Game.new]
+  @games = []
+  @connection_to_games = {}
   @player_states = {}
   @bomb_positions = {}
   
@@ -23,7 +24,7 @@ class GameController < Cramp::Controller::Websocket
   end
 
   def push_states
-    data = {:type => 'update_positions', :positions => player_states}.to_json
+    data = {:type => 'update_positions', :positions => game_states}.to_json
     render data
   end
   
@@ -37,7 +38,12 @@ private
   def receive_register(message, null_uuid=nil)
     player_uuid = UUID.new.generate
     game = GameController.games.last
-    player = game.create_player
+    if game.nil? || game.full?
+      game = Game.new 
+      GameController.games << game
+    end
+    GameController.connection_to_games[self.object_id] = game
+    player = game.create_player(player_uuid)
     GameController.player_states[player_uuid] = player
     render ({:type => 'register', :uuid => player_uuid, :colour => player.colour}).to_json
   end
@@ -85,11 +91,8 @@ private
     end
   end
   
-  def player_states
-    GameController.player_states.inject({}) do |sum, uuid_player|
-      uuid, player = uuid_player
-      sum.merge( {uuid => player.to_param } )
-    end
+  def game_states
+    GameController.connection_to_games[self.object_id].player_states rescue {}
   end
   
 end

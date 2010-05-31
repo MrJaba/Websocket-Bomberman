@@ -39,7 +39,6 @@ module Cramp
 
         EventMachine.next_tick do
           next unless body = @queue.shift
-
           Array(body).each {|chunk| @body_callback.call(chunk) }
           schedule_dequeue unless @queue.empty?
         end
