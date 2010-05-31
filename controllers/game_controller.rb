@@ -1,7 +1,7 @@
 class GameController < Cramp::Controller::Websocket
   periodic_timer :push_states, :every => 0.05
   periodic_timer :push_bombs, :every => 0.05
-  #periodic_timer :cleanup, :every => 1
+  periodic_timer :cleanup, :every => 1
   on_data :receive_message
   class << self
     attr_accessor :player_states 
