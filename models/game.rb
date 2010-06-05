@@ -1,6 +1,16 @@
 class Game
   COLOURS = %w{ blue brown red yellow }
+  TIMEOUT = 20
   attr_accessor :players
+  
+  class << self
+    attr_accessor :player_states 
+    attr_accessor :games 
+    attr_accessor :bomb_positions
+  end
+  @games = []
+  @player_states = {}
+  @bomb_positions = {}    
   
   def initialize
     self.players = []
@@ -35,6 +45,23 @@ class Game
   
   def full?
     players.size == 4
+  end
+  
+  def self.find_or_create_game
+    game = Game.games.select{|game| !game.full? }.first
+    if game.nil?
+      game = Game.new 
+      Game.games << game
+    end
+    game
+  end
+  
+  def self.timed_out?(player_state)
+    (Time.now - player_state.last_message_time) > TIMEOUT
+  end
+  
+  def self.player_in_game?(uuid)
+    Game.player_states.include?(uuid)
   end
  
 end

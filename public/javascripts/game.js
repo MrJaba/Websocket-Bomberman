@@ -99,7 +99,8 @@ MrJaba.Bomberman = function(){
 	}
 	
 	function restartMe(position){
-		MrJaba.Bomberman.me.setTileX(parseInt(position.x)); MrJaba.Bomberman.me.setTileY(parseInt(position.y))		
+		MrJaba.Bomberman.me.setTileX(parseInt(position.x)); MrJaba.Bomberman.me.setTileY(parseInt(position.y))
+		//alert(MrJaba.Bomberman.me.getX() + ' '+ MrJaba.Bomberman.me.getY());
 		MrJaba.Bomberman.GameClient.trigger('send_reset_state', "restart");
 	}
 	

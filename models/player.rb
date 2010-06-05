@@ -16,7 +16,7 @@ class Player
     self.y = attributes[:y]
   end
   
-  def respawn(cause=:start)
+  def respawn
     self.x = self.spawn.first
     self.y = self.spawn.last
     self.state = 'restart'
